@@ -1,0 +1,20 @@
+version: "3.3"
+
+services:
+  postgres_db:
+    container_name: taskmanager_db
+    image: postgres:13.6
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    command: ["postgres", "-c", "max_connections=200"]
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - taskmanagerdb:/var/lib/postgresql/data
+
+
+volumes:
+  taskmanagerdb:
+    driver: local
