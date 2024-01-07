@@ -8,7 +8,7 @@ include $(ENV)
 export 
 
 # Internal variables
-DB_URL=postgresql://${POSTGRES_DB_USER}:${POSTGRES_DB_PASSWORD}@${POSTGRES_DB_HOST}:${POSTGRES_DB_PORT}/${POSTGRES_DB}?sslmode=disable
+DB_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable
 
 
 #------------------------
@@ -16,11 +16,11 @@ DB_URL=postgresql://${POSTGRES_DB_USER}:${POSTGRES_DB_PASSWORD}@${POSTGRES_DB_HO
 #------------------------
 postgresql:
 	@echo "Running postgresql container..."
-	docker run --name postgresql -p ${POSTGRES_DB_PORT}:${POSTGRES_DB_PORT} -e POSTGRES_USER=${POSTGRES_DB_USER} -e POSTGRES_PASSWORD=${POSTGRES_DB_PASSWORD} -d ${POSTGRES_IMAGE}
+	docker run --name postgresql -p ${POSTGRES_PORT}:${POSTGRES_PORT} -e POSTGRES_USER=${POSTGRES_USER} -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} -d ${POSTGRES_IMAGE}
 
 createdb:
 	@echo "Creating database.."
-	docker exec -it postgresql createdb --username=${POSTGRES_DB_USER} --owner=${POSTGRES_DB_USER} ${POSTGRES_DB}
+	docker exec -it postgresql createdb --username=${POSTGRES_USER} --owner=${POSTGRES_USER} ${POSTGRES_DB}
 
 dropdb:
 	@echo "Droping database..."
