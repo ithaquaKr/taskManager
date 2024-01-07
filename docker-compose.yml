@@ -3,7 +3,7 @@ version: "3.3"
 services:
   postgres_db:
     container_name: taskmanager_db
-    image: postgres:13.6
+    image: ${POSTGRES_IMAGE}
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
