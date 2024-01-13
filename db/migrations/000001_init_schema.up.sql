@@ -1,5 +1,9 @@
+BEGIN;
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE "users" (
-  "id" uuid PRIMARY KEY,
+  "id" uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
   "username" varchar(50) UNIQUE NOT NULL,
   "email" varchar(255) UNIQUE NOT NULL,
   "first_name" varchar(255) NOT NULL,
@@ -9,23 +13,23 @@ CREATE TABLE "users" (
 );
 
 CREATE TABLE "list_users" (
-  "id" uuid PRIMARY KEY,
+  "id" uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
   "user_id" uuid,
   "list_id" uuid,
   "created_at" timestamptz DEFAULT (now()),
   "updated_at" timestamptz
 );
 
-CREATE TABLE "list" (
-  "id" uuid PRIMARY KEY,
+CREATE TABLE "lists" (
+  "id" uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
   "name" varchar(50),
   "type" varchar(50) NOT NULL DEFAULT 'task',
   "created_at" timestamptz DEFAULT (now()),
   "updated_at" timestamptz
 );
 
-CREATE TABLE "task" (
-  "id" uuid PRIMARY KEY,
+CREATE TABLE "tasks" (
+  "id" uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
   "list_id" uuid NOT NULL,
   "title" varchar(100) NOT NULL,
   "description" varchar(200),
@@ -37,8 +41,8 @@ CREATE TABLE "task" (
   "updated_at" timestamptz
 );
 
-CREATE TABLE "note" (
-  "id" uuid PRIMARY KEY,
+CREATE TABLE "notes" (
+  "id" uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
   "list_id" uuid NOT NULL,
   "title" varchar(100) NOT NULL,
   "content" text,
@@ -57,20 +61,22 @@ CREATE INDEX ON "list_users" ("created_at");
 
 CREATE INDEX ON "list_users" ("user_id", "list_id");
 
-CREATE INDEX ON "list" ("created_at");
+CREATE INDEX ON "lists" ("created_at");
 
-CREATE INDEX ON "task" ("status");
+CREATE INDEX ON "tasks" ("status");
 
-CREATE INDEX ON "task" ("tag");
+CREATE INDEX ON "tasks" ("tag");
 
-CREATE INDEX ON "task" ("created_at");
+CREATE INDEX ON "tasks" ("created_at");
 
-CREATE INDEX ON "note" ("created_at");
+CREATE INDEX ON "notes" ("created_at");
 
 ALTER TABLE "list_users" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
-ALTER TABLE "list_users" ADD FOREIGN KEY ("list_id") REFERENCES "list" ("id");
+ALTER TABLE "list_users" ADD FOREIGN KEY ("list_id") REFERENCES "lists" ("id");
 
-ALTER TABLE "task" ADD FOREIGN KEY ("list_id") REFERENCES "list" ("id");
+ALTER TABLE "tasks" ADD FOREIGN KEY ("list_id") REFERENCES "lists" ("id");
 
-ALTER TABLE "note" ADD FOREIGN KEY ("list_id") REFERENCES "list" ("id");
+ALTER TABLE "notes" ADD FOREIGN KEY ("list_id") REFERENCES "lists" ("id");
+
+COMMIT;
