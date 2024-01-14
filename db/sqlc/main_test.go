@@ -6,22 +6,22 @@ import (
 	"os"
 	"testing"
 
+	"github.com/ithaquaKr/taskManager/utils"
 	_ "github.com/lib/pq"
 )
 
-const (
-	dbDriver = "postgres"
-	dbSource = "postgresql://app:password@localhost:5432/taskmangerdb?sslmode=disable"
-)
-
 var testQueries *Queries
+var testDB *sql.DB
 
 func TestMain(m *testing.M) {
-	conn, err := sql.Open(dbDriver, dbSource)
+	config, err := utils.LoadConfig("../..")
 	if err != nil {
-		log.Fatal("Cannot connect to DB:", err)
+		log.Fatal("Cannot load config:", err)
 	}
-
-	testQueries = New(conn)
+	testDB, err = sql.Open(config.DBDriver, config.DBSource)
+	if err != nil {
+		log.Fatal("Cannot connect to Database:", err)
+	}
+	testQueries = New(testDB)
 	os.Exit(m.Run())
 }
