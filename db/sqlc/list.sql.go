@@ -23,9 +23,9 @@ INSERT INTO lists (
 `
 
 type CreateListParams struct {
-	Name      sql.NullString `json:"name"`
-	Type      string         `json:"type"`
-	UpdatedAt sql.NullTime   `json:"updated_at"`
+	Name      string       `json:"name"`
+	Type      string       `json:"type"`
+	UpdatedAt sql.NullTime `json:"updated_at"`
 }
 
 func (q *Queries) CreateList(ctx context.Context, arg CreateListParams) (List, error) {

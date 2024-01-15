@@ -11,11 +11,11 @@ import (
 )
 
 type List struct {
-	ID        uuid.UUID      `json:"id"`
-	Name      sql.NullString `json:"name"`
-	Type      string         `json:"type"`
-	CreatedAt sql.NullTime   `json:"created_at"`
-	UpdatedAt sql.NullTime   `json:"updated_at"`
+	ID        uuid.UUID    `json:"id"`
+	Name      string       `json:"name"`
+	Type      string       `json:"type"`
+	CreatedAt sql.NullTime `json:"created_at"`
+	UpdatedAt sql.NullTime `json:"updated_at"`
 }
 
 type ListUser struct {
