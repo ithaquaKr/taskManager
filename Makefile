@@ -37,4 +37,13 @@ migratedown:
 sqlc:
 	sqlc generate
 
-.PHONY: postgresql createdb dropdb migrateup migratedown
+
+#------------------------
+# Run server
+#------------------------
+
+runserver:
+	@echo "Running server..."
+	go run main.go
+
+.PHONY: postgresql createdb dropdb migrateup migratedown runserver

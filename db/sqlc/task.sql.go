@@ -90,20 +90,20 @@ func (q *Queries) GetTask(ctx context.Context, id uuid.UUID) (Task, error) {
 
 const listTask = `-- name: ListTask :many
 SELECT id, list_id, title, description, status, tag, priority, due_date, created_at, updated_at FROM tasks
-WHERE id = $1 
+WHERE list_id = $1 
 ORDER BY id
 LIMIT $2
 OFFSET $3
 `
 
 type ListTaskParams struct {
-	ID     uuid.UUID `json:"id"`
+	ListID uuid.UUID `json:"list_id"`
 	Limit  int32     `json:"limit"`
 	Offset int32     `json:"offset"`
 }
 
 func (q *Queries) ListTask(ctx context.Context, arg ListTaskParams) ([]Task, error) {
-	rows, err := q.db.QueryContext(ctx, listTask, arg.ID, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, listTask, arg.ListID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}

@@ -4,7 +4,7 @@ WHERE id = $1 LIMIT 1;
 
 -- name: ListTask :many
 SELECT * FROM tasks
-WHERE id = $1 
+WHERE list_id = $1 
 ORDER BY id
 LIMIT $2
 OFFSET $3;
