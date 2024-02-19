@@ -22,3 +22,7 @@ go.work
 
 # Enviroment variables
 *.env
+
+# IDE files
+.vscode
+.idea
