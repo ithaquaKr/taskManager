@@ -1,4 +1,5 @@
 # Makefile
+.PHONY: postgresql createdb dropdb force version migrateup migratedown runserver
 
 # Environment variables for project
 ENV := $(PWD)/.env
@@ -10,6 +11,20 @@ export
 # Internal variables
 DB_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable
 
+#------------------------
+# Migrate
+#------------------------
+force:
+	migrate -path migrations --database "${DB_URL}" -verbose force $(VERSION)
+
+version:
+	migrate -path migrations --database "${DB_URL}" -verbose version
+
+migrateup:
+	migrate -path migrations -database "${DB_URL}" -verbose up
+
+migratedown:
+	migrate -path migrations -database "${DB_URL}" -verbose down
 
 #------------------------
 # Database
@@ -26,18 +41,6 @@ dropdb:
 	@echo "Droping database..."
 	docker exec -it taskmanager_db dropdb ${POSTGRES_DB}
 
-migrateup:
-	@echo "Migrate up schema for database..."
-	migrate -path db/migrations -database "${DB_URL}" -verbose up
-
-migratedown:
-	@echo "Migrate down schema for database..."
-	migrate -path db/migrations -database "${DB_URL}" -verbose down
-
-sqlc:
-	sqlc generate
-
-
 #------------------------
 # Run server
 #------------------------
@@ -46,4 +49,3 @@ runserver:
 	@echo "Running server..."
 	go run main.go
 
-.PHONY: postgresql createdb dropdb migrateup migratedown runserver
