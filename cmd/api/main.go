@@ -5,6 +5,7 @@ import (
 
 	"github.com/ithaquaKr/taskManager/config"
 	"github.com/ithaquaKr/taskManager/pkg/db/postgres"
+	"github.com/ithaquaKr/taskManager/pkg/logger"
 )
 
 func main() {
@@ -18,6 +19,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("Parse Config: %v", err)
 	}
+	appLogger := logger.NewApiLogger(cfg)
+	appLogger.InitLogger()
+	appLogger.Infof("AppVersion: %s, LogLevel: %s, Mode: %s", cfg.App.AppVersion, cfg.Logger.Level, cfg.App.Mode)
+
 	dbConn, err := postgres.NewPostgresConn(cfg)
 	if err != nil {
 		log.Fatalf("New Postgres Conn: %v", err)

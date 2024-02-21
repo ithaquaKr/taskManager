@@ -10,6 +10,7 @@ import (
 type Config struct {
 	App      AppConfig
 	Postgres PostgresConfig
+	Logger   LoggerConfig
 }
 
 type AppConfig struct {
@@ -17,6 +18,7 @@ type AppConfig struct {
 	Host       string `mapstructure:"HOST"`
 	Port       int    `mapstructure:"PORT"`
 	Debug      bool   `mapstructure:"DEBUG"`
+	Mode       string `mapstructure:"MODE"`
 }
 
 type PostgresConfig struct {
@@ -27,6 +29,14 @@ type PostgresConfig struct {
 	PostgresPassword string `mapstructure:"PASSWORD"`
 	PostgresDB       string `mapstructure:"DB"`
 	PostgresPgDriver string `mapstructure:"PG_DRIVER"`
+}
+
+type LoggerConfig struct {
+	Development       bool   `mapstructure:"DEVELOPMENT"`
+	DisableCaller     bool   `mapstructure:"DISABLE_CALLER"`
+	DisableStacktrace bool   `mapstructure:"DISABLE_STACKTRACE"`
+	Encoding          string `mapstructure:"ENCODING"`
+	Level             string `mapstructure:"LEVEL"`
 }
 
 func LoadConfig(path string) (*viper.Viper, error) {
