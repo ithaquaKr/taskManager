@@ -1,5 +1,0 @@
-BEGIN;
-
-ALTER TABLE "lists" ALTER COLUMN "name" SET NOT NULL;
-
-COMMIT;

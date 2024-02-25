@@ -1,79 +1,77 @@
 BEGIN;
 
+DROP TABLE IF EXISTS "users";
+
+DROP TABLE IF EXISTS "user_lists";
+
+DROP TABLE IF EXISTS "lists";
+
+DROP TABLE IF EXISTS "tasks";
+
+DROP TABLE IF EXISTS "lists";
+
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE TABLE "users" (
-  "id" uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
-  "username" varchar(50) UNIQUE NOT NULL,
-  "email" varchar(255) UNIQUE NOT NULL,
-  "first_name" varchar(255) NOT NULL,
-  "last_name" varchar(255) NOT NULL,
-  "created_at" timestamptz DEFAULT (now()),
-  "updated_at" timestamptz
-);
+CREATE TABLE
+    "users" (
+        "id"            UUID PRIMARY KEY                        DEFAULT (UUID_generate_v4()),
+        "username"      VARCHAR(50) UNIQUE          NOT NULL    CHECK (username <> ''),
+        "email"         VARCHAR(255) UNIQUE         NOT NULL    CHECK (email <> ''),
+        "password"      VARCHAR(255)                NOT NULL    CHECK (octet_length(password) <> 0),
+        "first_name"    VARCHAR(255)                NOT NULL    CHECK (first_name <> ''),
+        "last_name"     VARCHAR(255)                NOT NULL    CHECK (last_name <> ''),
+        "created_at"    TIMESTAMP WITH TIME ZONE    NOT NULL    DEFAULT (NOW()),
+        "updated_at"    TIMESTAMP WITH TIME ZONE    NOT NULL    DEFAULT CURRENT_TIMESTAMP
+    );
 
-CREATE TABLE "list_users" (
-  "id" uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
-  "user_id" uuid,
-  "list_id" uuid,
-  "created_at" timestamptz DEFAULT (now()),
-  "updated_at" timestamptz
-);
+CREATE TABLE
+    "user_lists" (
+        "id"            UUID PRIMARY KEY                        DEFAULT (UUID_generate_v4()),
+        "user_id"       UUID                        NOT NULL,
+        "list_id"       UUID                        NOT NULL,
+        "created_at"    TIMESTAMP WITH TIME ZONE    NOT NULL    DEFAULT (NOW()),
+        "updated_at"    TIMESTAMP WITH TIME ZONE    NOT NULL    DEFAULT CURRENT_TIMESTAMP
+    );
 
-CREATE TABLE "lists" (
-  "id" uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
-  "name" varchar(50),
-  "type" varchar(50) NOT NULL DEFAULT 'task',
-  "created_at" timestamptz DEFAULT (now()),
-  "updated_at" timestamptz
-);
+CREATE TABLE
+    "lists" (
+        "id"            UUID PRIMARY KEY                        DEFAULT (UUID_generate_v4()),
+        "name"          VARCHAR(50)                 NOT NULL    CHECK (name <> ''),
+        "type"          VARCHAR(50)                 NOT NULL    DEFAULT 'task',
+        "created_at"    TIMESTAMP WITH TIME ZONE    NOT NULL    DEFAULT (NOW()),
+        "updated_at"    TIMESTAMP WITH TIME ZONE    NOT NULL    DEFAULT CURRENT_TIMESTAMP
+    );
 
-CREATE TABLE "tasks" (
-  "id" uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
-  "list_id" uuid NOT NULL,
-  "title" varchar(100) NOT NULL,
-  "description" varchar(200),
-  "status" varchar(50) NOT NULL DEFAULT 'doing',
-  "tag" varchar(50),
-  "priority" varchar(50) NOT NULL DEFAULT 'no_priority',
-  "due_date" timestamptz,
-  "created_at" timestamptz DEFAULT (now()),
-  "updated_at" timestamptz
-);
+CREATE TABLE
+    "tasks" (
+        "id"            UUID PRIMARY KEY                        DEFAULT (UUID_generate_v4 ()),
+        "list_id"       UUID                        NOT NULL,
+        "title"         VARCHAR(100)                NOT NULL    CHECK (title <> ''),
+        "description"   VARCHAR(200)                            CHECK (description <> ''),
+        "status"        VARCHAR(50)                 NOT NULL    DEFAULT 'doing',
+        "tag"           VARCHAR(50),
+        "priority"      VARCHAR(50)                 NOT NULL    DEFAULT 'no_priority',
+        "due_date"      TIMESTAMP WITH TIME ZONE,
+        "created_at"    TIMESTAMP WITH TIME ZONE                DEFAULT (NOW()),
+        "updated_at"    TIMESTAMP WITH TIME ZONE                DEFAULT CURRENT_TIMESTAMP
+    );
 
-CREATE TABLE "notes" (
-  "id" uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
-  "list_id" uuid NOT NULL,
-  "title" varchar(100) NOT NULL,
-  "content" text,
-  "reminder" timestamptz,
-  "created_at" timestamptz DEFAULT (now()),
-  "updated_at" timestamptz
-);
+CREATE TABLE
+    "notes" (
+        "id"            UUID PRIMARY KEY                        DEFAULT (UUID_generate_v4 ()),
+        "list_id"       UUID                        NOT NULL,
+        "title"         VARCHAR(100)                NOT NULL,
+        "content"       TEXT,
+        "reminder"      TIMESTAMP WITH TIME ZONE,
+        "created_at"    TIMESTAMP WITH TIME ZONE                DEFAULT (NOW()),
+        "updated_at"    TIMESTAMP WITH TIME ZONE                DEFAULT CURRENT_TIMESTAMP
+    );
 
-CREATE UNIQUE INDEX ON "users" ("username");
+CREATE INDEX ON "user_lists" ("user_id", "list_id");
 
-CREATE UNIQUE INDEX ON "users" ("email");
+ALTER TABLE "user_lists" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
-CREATE INDEX ON "users" ("created_at");
-
-CREATE INDEX ON "list_users" ("created_at");
-
-CREATE INDEX ON "list_users" ("user_id", "list_id");
-
-CREATE INDEX ON "lists" ("created_at");
-
-CREATE INDEX ON "tasks" ("status");
-
-CREATE INDEX ON "tasks" ("tag");
-
-CREATE INDEX ON "tasks" ("created_at");
-
-CREATE INDEX ON "notes" ("created_at");
-
-ALTER TABLE "list_users" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
-
-ALTER TABLE "list_users" ADD FOREIGN KEY ("list_id") REFERENCES "lists" ("id");
+ALTER TABLE "user_lists" ADD FOREIGN KEY ("list_id") REFERENCES "lists" ("id");
 
 ALTER TABLE "tasks" ADD FOREIGN KEY ("list_id") REFERENCES "lists" ("id");
 

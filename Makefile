@@ -18,13 +18,13 @@ force:
 	migrate -path migrations --database "${DB_URL}" -verbose force $(VERSION)
 
 version:
-	migrate -path migrations --database "${DB_URL}" -verbose version
+	migrate -path migrations --database "${DB_URL}" -verbose version $(VERSION)
 
 migrateup:
-	migrate -path migrations -database "${DB_URL}" -verbose up
+	migrate -path migrations -database "${DB_URL}" -verbose up $(VERSION)
 
 migratedown:
-	migrate -path migrations -database "${DB_URL}" -verbose down
+	migrate -path migrations -database "${DB_URL}" -verbose down $(VERSION)
 
 #------------------------
 # Database
