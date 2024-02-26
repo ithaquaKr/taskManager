@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/ithaquaKr/taskManager/internal/models"
@@ -20,22 +21,58 @@ func NewNoteRepo(db *sqlx.DB) note.Repository {
 }
 
 func (r *noteRepo) CreateNote(ctx context.Context, note *models.Note) (*models.Note, error) {
-	// Implement this
-	return nil, nil
+	var n models.Note
+	if err := r.db.QueryRowxContext(
+		ctx,
+		createNote,
+		&note.ListID,
+		&note.Name,
+		&note.Content,
+	).StructScan(&n); err != nil {
+		return nil, fmt.Errorf("noteRepo.CreateNote.QueryRowxContext, Error: %w", err)
+	}
+
+	return &n, nil
 }
 
+// TODO: fix this func
 func (r *noteRepo) UpdateNote(ctx context.Context, note *models.Note) (*models.Note, error) {
-	// Implement this
-	return nil, nil
+	var n models.Note
+	if err := r.db.QueryRowxContext(
+		ctx,
+		updateNote,
+		&note.ListID,
+		&note.Name,
+		&note.Content,
+	).StructScan(&n); err != nil {
+		return nil, fmt.Errorf("noteRepo.UpdateNote.QueryRowxContext, Error: %w", err)
+	}
+
+	return &n, nil
 }
 
 func (r *noteRepo) GetNote(ctx context.Context, id uuid.UUID) (*models.Note, error) {
-	// Implement this
+	n := &models.Note{}
+	if err := r.db.GetContext(ctx, n, getNote, id); err != nil {
+		return nil, fmt.Errorf("noteRepo.GetNote.QueryContext, Error: %w", err)
+	}
 	return nil, nil
 }
 
 func (r *noteRepo) DeleteNote(ctx context.Context, id uuid.UUID) error {
-	// Implement this
+	result, err := r.db.ExecContext(ctx, deleteNote, id)
+	if err != nil {
+		return fmt.Errorf("noteRepo.DeleteNote.ExecContext, Error: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("noteRepo.DeleteNote.RowsAffected, Error: %w", err)
+	}
+	if rowsAffected == 0 {
+		return fmt.Errorf("noteRepo.DeleteNote.RowsAffected, Error: %w", err)
+	}
+
 	return nil
 }
 

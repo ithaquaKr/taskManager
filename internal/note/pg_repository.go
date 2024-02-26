@@ -1,3 +1,4 @@
+//go:generate mockgen -source internal/note/pg_repository.go -destination internal/note/mock/pg_repository_mock.go -package mock
 package note
 
 import (
