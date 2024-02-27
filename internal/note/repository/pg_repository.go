@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -52,11 +53,11 @@ func (r *noteRepo) UpdateNote(ctx context.Context, note *models.Note) (*models.N
 }
 
 func (r *noteRepo) GetNote(ctx context.Context, id uuid.UUID) (*models.Note, error) {
-	n := &models.Note{}
-	if err := r.db.GetContext(ctx, n, getNote, id); err != nil {
+	var n models.Note
+	if err := r.db.GetContext(ctx, &n, getNote, id); err != nil {
 		return nil, fmt.Errorf("noteRepo.GetNote.QueryContext, Error: %w", err)
 	}
-	return nil, nil
+	return &n, nil
 }
 
 func (r *noteRepo) DeleteNote(ctx context.Context, id uuid.UUID) error {
@@ -70,9 +71,8 @@ func (r *noteRepo) DeleteNote(ctx context.Context, id uuid.UUID) error {
 		return fmt.Errorf("noteRepo.DeleteNote.RowsAffected, Error: %w", err)
 	}
 	if rowsAffected == 0 {
-		return fmt.Errorf("noteRepo.DeleteNote.RowsAffected, Error: %w", err)
+		return fmt.Errorf("noteRepo.DeleteNote.RowsAffected, Error: %w", sql.ErrNoRows)
 	}
-
 	return nil
 }
 

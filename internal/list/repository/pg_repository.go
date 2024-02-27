@@ -36,12 +36,12 @@ func (r *listRepo) CreateList(ctx context.Context, list *models.List) (*models.L
 }
 
 func (r *listRepo) GetList(ctx context.Context, id uuid.UUID) (*models.List, error) {
-	n := &models.List{}
-	if err := r.db.GetContext(ctx, n, getList, id); err != nil {
+	var n models.List
+	if err := r.db.GetContext(ctx, &n, getList, id); err != nil {
 		return nil, err
 	}
 
-	return nil, nil
+	return &n, nil
 }
 
 func (r *listRepo) UpdateList(ctx context.Context, list *models.List) (*models.List, error) {
