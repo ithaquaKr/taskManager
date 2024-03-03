@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ithaquaKr/taskManager/internal/models"
+	"github.com/ithaquaKr/taskManager/pkg/utils"
 )
 
 // Note Repository
@@ -19,5 +20,5 @@ type Repository interface {
 	// DeleteNote deletes a note by id
 	DeleteNote(ctx context.Context, id uuid.UUID) error
 	// AllNotes retrieves a list of notes
-	AllNotes(ctx context.Context, offset, limit int) ([]*models.Note, error)
+	AllNotes(ctx context.Context, pq *utils.PaginationQuery) ([]*models.Note, error)
 }

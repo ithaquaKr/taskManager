@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/ithaquaKr/taskManager/internal/models"
 	"github.com/ithaquaKr/taskManager/internal/note"
+	"github.com/ithaquaKr/taskManager/pkg/utils"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -76,7 +77,7 @@ func (r *noteRepo) DeleteNote(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
 
-func (r *noteRepo) AllNotes(ctx context.Context, offset, limit int) ([]*models.Note, error) {
+func (r *noteRepo) AllNotes(ctx context.Context, pq *utils.PaginationQuery) ([]*models.Note, error) {
 	// Implement this
 	return nil, nil
 }

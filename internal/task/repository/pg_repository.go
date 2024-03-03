@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/ithaquaKr/taskManager/internal/models"
 	"github.com/ithaquaKr/taskManager/internal/task"
+	"github.com/ithaquaKr/taskManager/pkg/utils"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -83,7 +84,7 @@ func (r *taskRepo) DeleteTask(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
 
-func (r *taskRepo) AllTasks(ctx context.Context, offset, limit int) ([]*models.Task, error) {
+func (r *taskRepo) AllTasks(ctx context.Context, pq *utils.PaginationQuery) ([]*models.Task, error) {
 	// Implement this function
 	return nil, nil
 }

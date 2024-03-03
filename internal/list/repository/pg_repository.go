@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/ithaquaKr/taskManager/internal/list"
 	"github.com/ithaquaKr/taskManager/internal/models"
+	"github.com/ithaquaKr/taskManager/pkg/utils"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -75,7 +76,7 @@ func (r *listRepo) DeleteList(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
 
-func (r *listRepo) AllLists(ctx context.Context, offset, limit int) ([]*models.List, error) {
+func (r *listRepo) AllLists(ctx context.Context, pq *utils.PaginationQuery) ([]*models.List, error) {
 	// Implement this
 	return nil, nil
 }

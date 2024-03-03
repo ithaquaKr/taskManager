@@ -17,4 +17,5 @@ const (
 					WHERE id=$4
 					RETURNING *`
 	deleteNote = `DELETE FROM notes where id=$1`
+	getTotal   = `SELECT COUNT(id) FROM notes`
 )

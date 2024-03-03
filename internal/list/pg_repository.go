@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ithaquaKr/taskManager/internal/models"
+	"github.com/ithaquaKr/taskManager/pkg/utils"
 )
 
 // List Repository
@@ -19,5 +20,5 @@ type Repository interface {
 	// DeleteList deletes a list by id
 	DeleteList(ctx context.Context, id uuid.UUID) error
 	// GetLists retrieves a list of lists
-	AllLists(ctx context.Context, offset, limit int) ([]*models.List, error)
+	AllLists(ctx context.Context, pq *utils.PaginationQuery) ([]*models.List, error)
 }

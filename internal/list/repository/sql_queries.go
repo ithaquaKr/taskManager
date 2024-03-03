@@ -16,4 +16,5 @@ const (
 					WHERE id=$3
 					RETURNING *`
 	deleteList = `DELETE FROM lists WHERE id=$1`
+	getTotal   = `SELECT COUNT(id) FROM lists`
 )
