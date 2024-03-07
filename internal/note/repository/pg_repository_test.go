@@ -6,7 +6,7 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/google/uuid"
-	"github.com/ithaquaKr/taskManager/internal/models"
+	"github.com/ithaquaKr/taskManager/internal/note/entities"
 	"github.com/jmoiron/sqlx"
 	"github.com/stretchr/testify/require"
 )
@@ -28,7 +28,7 @@ func TestNoteRepository_Create(t *testing.T) {
 		test_content := "test content"
 		rows := sqlmock.NewRows([]string{"list_id", "name", "content"}).AddRow(test_listID, test_name, test_content)
 
-		notes := &models.Note{
+		notes := &entities.Note{
 			ListID:  test_listID,
 			Name:    test_name,
 			Content: test_content,
@@ -59,7 +59,7 @@ func TestNoteRepository_Update(t *testing.T) {
 		test_name := "updated name"
 		test_content := "updated content"
 		rows := sqlmock.NewRows([]string{"list_id", "name", "content"}).AddRow(test_listID, test_name, test_content)
-		notes := &models.Note{
+		notes := &entities.Note{
 			ListID:  test_listID,
 			Name:    test_name,
 			Content: test_content,

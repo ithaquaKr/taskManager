@@ -6,7 +6,7 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/google/uuid"
-	"github.com/ithaquaKr/taskManager/internal/models"
+	"github.com/ithaquaKr/taskManager/internal/task/entities"
 	"github.com/jmoiron/sqlx"
 	"github.com/stretchr/testify/require"
 )
@@ -35,7 +35,7 @@ func TestTaskRepository_Create(t *testing.T) {
 			"list_id", "name", "description", "status", "tag", "priority",
 		}).AddRow(listID_test, name_test, description_test, status_test, tag_test, priority_test)
 
-		tasks := &models.Task{
+		tasks := &entities.Task{
 			ListID: listID_test,
 			Name:   name_test,
 			// Description: "Dest",

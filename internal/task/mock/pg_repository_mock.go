@@ -14,7 +14,8 @@ import (
 	reflect "reflect"
 
 	uuid "github.com/google/uuid"
-	models "github.com/ithaquaKr/taskManager/internal/models"
+	entities "github.com/ithaquaKr/taskManager/internal/task/entities"
+	utils "github.com/ithaquaKr/taskManager/pkg/utils"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -42,25 +43,25 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // AllTasks mocks base method.
-func (m *MockRepository) AllTasks(ctx context.Context, offset, limit int) ([]*models.Task, error) {
+func (m *MockRepository) AllTasks(ctx context.Context, pq *utils.PaginationQuery) ([]*entities.Task, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AllTasks", ctx, offset, limit)
-	ret0, _ := ret[0].([]*models.Task)
+	ret := m.ctrl.Call(m, "AllTasks", ctx, pq)
+	ret0, _ := ret[0].([]*entities.Task)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // AllTasks indicates an expected call of AllTasks.
-func (mr *MockRepositoryMockRecorder) AllTasks(ctx, offset, limit any) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) AllTasks(ctx, pq any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AllTasks", reflect.TypeOf((*MockRepository)(nil).AllTasks), ctx, offset, limit)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AllTasks", reflect.TypeOf((*MockRepository)(nil).AllTasks), ctx, pq)
 }
 
 // CreateTask mocks base method.
-func (m *MockRepository) CreateTask(ctx context.Context, task *models.Task) (*models.Task, error) {
+func (m *MockRepository) CreateTask(ctx context.Context, task *entities.Task) (*entities.Task, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateTask", ctx, task)
-	ret0, _ := ret[0].(*models.Task)
+	ret0, _ := ret[0].(*entities.Task)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -86,10 +87,10 @@ func (mr *MockRepositoryMockRecorder) DeleteTask(ctx, id any) *gomock.Call {
 }
 
 // GetTask mocks base method.
-func (m *MockRepository) GetTask(ctx context.Context, id uuid.UUID) (*models.Task, error) {
+func (m *MockRepository) GetTask(ctx context.Context, id uuid.UUID) (*entities.Task, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetTask", ctx, id)
-	ret0, _ := ret[0].(*models.Task)
+	ret0, _ := ret[0].(*entities.Task)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -101,10 +102,10 @@ func (mr *MockRepositoryMockRecorder) GetTask(ctx, id any) *gomock.Call {
 }
 
 // UpdateTask mocks base method.
-func (m *MockRepository) UpdateTask(ctx context.Context, task *models.Task) (*models.Task, error) {
+func (m *MockRepository) UpdateTask(ctx context.Context, task *entities.Task) (*entities.Task, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateTask", ctx, task)
-	ret0, _ := ret[0].(*models.Task)
+	ret0, _ := ret[0].(*entities.Task)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

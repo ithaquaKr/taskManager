@@ -1,4 +1,4 @@
-package models
+package entities
 
 import (
 	"time"
@@ -6,7 +6,6 @@ import (
 	"github.com/google/uuid"
 )
 
-// List base model
 type List struct {
 	ID        uuid.UUID `json:"id" db:"id" validate:"omitempty,uuid"`
 	Title     string    `json:"name" db:"title" validate:"required"`

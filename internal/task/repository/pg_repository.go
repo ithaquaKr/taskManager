@@ -6,8 +6,8 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/ithaquaKr/taskManager/internal/models"
 	"github.com/ithaquaKr/taskManager/internal/task"
+	"github.com/ithaquaKr/taskManager/internal/task/entities"
 	"github.com/ithaquaKr/taskManager/pkg/utils"
 	"github.com/jmoiron/sqlx"
 )
@@ -22,8 +22,8 @@ func NewTaskRepo(db *sqlx.DB) task.Repository {
 	return &taskRepo{db: db}
 }
 
-func (r *taskRepo) CreateTask(ctx context.Context, task *models.Task) (*models.Task, error) {
-	var t models.Task
+func (r *taskRepo) CreateTask(ctx context.Context, task *entities.Task) (*entities.Task, error) {
+	var t entities.Task
 	if err := r.db.QueryRowxContext(
 		ctx,
 		createTask,
@@ -41,16 +41,16 @@ func (r *taskRepo) CreateTask(ctx context.Context, task *models.Task) (*models.T
 	return &t, nil
 }
 
-func (r *taskRepo) GetTask(ctx context.Context, id uuid.UUID) (*models.Task, error) {
-	var t models.Task
+func (r *taskRepo) GetTask(ctx context.Context, id uuid.UUID) (*entities.Task, error) {
+	var t entities.Task
 	if err := r.db.GetContext(ctx, &t, getTask, id); err != nil {
 		return nil, fmt.Errorf("taskRepo.GetTask.GetContext, Error: %w", err)
 	}
 	return &t, nil
 }
 
-func (r *taskRepo) UpdateTask(ctx context.Context, task *models.Task) (*models.Task, error) {
-	var t models.Task
+func (r *taskRepo) UpdateTask(ctx context.Context, task *entities.Task) (*entities.Task, error) {
+	var t entities.Task
 	if err := r.db.QueryRowxContext(
 		ctx,
 		updateTask,
@@ -84,7 +84,7 @@ func (r *taskRepo) DeleteTask(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
 
-func (r *taskRepo) AllTasks(ctx context.Context, pq *utils.PaginationQuery) ([]*models.Task, error) {
+func (r *taskRepo) AllTasks(ctx context.Context, pq *utils.PaginationQuery) ([]*entities.Task, error) {
 	// Implement this function
 	return nil, nil
 }

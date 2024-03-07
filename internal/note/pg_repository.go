@@ -5,20 +5,20 @@ import (
 	"context"
 
 	"github.com/google/uuid"
-	"github.com/ithaquaKr/taskManager/internal/models"
+	"github.com/ithaquaKr/taskManager/internal/note/entities"
 	"github.com/ithaquaKr/taskManager/pkg/utils"
 )
 
 // Note Repository
 type Repository interface {
 	// CreateNote create a new note
-	CreateNote(ctx context.Context, note *models.Note) (*models.Note, error)
+	CreateNote(ctx context.Context, note *entities.Note) (*entities.Note, error)
 	// GetNote retrieves a note by id
-	GetNote(ctx context.Context, id uuid.UUID) (*models.Note, error)
+	GetNote(ctx context.Context, id uuid.UUID) (*entities.Note, error)
 	// UpdateNote updates a note by id
-	UpdateNote(ctx context.Context, note *models.Note) (*models.Note, error)
+	UpdateNote(ctx context.Context, note *entities.Note) (*entities.Note, error)
 	// DeleteNote deletes a note by id
 	DeleteNote(ctx context.Context, id uuid.UUID) error
 	// AllNotes retrieves a list of notes
-	AllNotes(ctx context.Context, pq *utils.PaginationQuery) ([]*models.Note, error)
+	AllNotes(ctx context.Context, pq *utils.PaginationQuery) ([]*entities.Note, error)
 }
