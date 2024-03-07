@@ -6,8 +6,8 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/ithaquaKr/taskManager/internal/models"
 	"github.com/ithaquaKr/taskManager/internal/note"
+	"github.com/ithaquaKr/taskManager/internal/note/entities"
 	"github.com/ithaquaKr/taskManager/pkg/utils"
 	"github.com/jmoiron/sqlx"
 )
@@ -22,8 +22,8 @@ func NewNoteRepo(db *sqlx.DB) note.Repository {
 	return &noteRepo{db: db}
 }
 
-func (r *noteRepo) CreateNote(ctx context.Context, note *models.Note) (*models.Note, error) {
-	var n models.Note
+func (r *noteRepo) CreateNote(ctx context.Context, note *entities.Note) (*entities.Note, error) {
+	var n entities.Note
 	if err := r.db.QueryRowxContext(
 		ctx,
 		createNote,
@@ -38,8 +38,8 @@ func (r *noteRepo) CreateNote(ctx context.Context, note *models.Note) (*models.N
 }
 
 // TODO: fix this func
-func (r *noteRepo) UpdateNote(ctx context.Context, note *models.Note) (*models.Note, error) {
-	var n models.Note
+func (r *noteRepo) UpdateNote(ctx context.Context, note *entities.Note) (*entities.Note, error) {
+	var n entities.Note
 	if err := r.db.QueryRowxContext(
 		ctx,
 		updateNote,
@@ -53,8 +53,8 @@ func (r *noteRepo) UpdateNote(ctx context.Context, note *models.Note) (*models.N
 	return &n, nil
 }
 
-func (r *noteRepo) GetNote(ctx context.Context, id uuid.UUID) (*models.Note, error) {
-	var n models.Note
+func (r *noteRepo) GetNote(ctx context.Context, id uuid.UUID) (*entities.Note, error) {
+	var n entities.Note
 	if err := r.db.GetContext(ctx, &n, getNote, id); err != nil {
 		return nil, fmt.Errorf("noteRepo.GetNote.QueryContext, Error: %w", err)
 	}
@@ -77,7 +77,7 @@ func (r *noteRepo) DeleteNote(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
 
-func (r *noteRepo) AllNotes(ctx context.Context, pq *utils.PaginationQuery) ([]*models.Note, error) {
+func (r *noteRepo) AllNotes(ctx context.Context, pq *utils.PaginationQuery) ([]*entities.Note, error) {
 	// Implement this
 	return nil, nil
 }

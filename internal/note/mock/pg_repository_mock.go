@@ -14,7 +14,8 @@ import (
 	reflect "reflect"
 
 	uuid "github.com/google/uuid"
-	models "github.com/ithaquaKr/taskManager/internal/models"
+	entities "github.com/ithaquaKr/taskManager/internal/note/entities"
+	utils "github.com/ithaquaKr/taskManager/pkg/utils"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -42,25 +43,25 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // AllNotes mocks base method.
-func (m *MockRepository) AllNotes(ctx context.Context, offset, limit int) ([]*models.Note, error) {
+func (m *MockRepository) AllNotes(ctx context.Context, pq *utils.PaginationQuery) ([]*entities.Note, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AllNotes", ctx, offset, limit)
-	ret0, _ := ret[0].([]*models.Note)
+	ret := m.ctrl.Call(m, "AllNotes", ctx, pq)
+	ret0, _ := ret[0].([]*entities.Note)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // AllNotes indicates an expected call of AllNotes.
-func (mr *MockRepositoryMockRecorder) AllNotes(ctx, offset, limit any) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) AllNotes(ctx, pq any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AllNotes", reflect.TypeOf((*MockRepository)(nil).AllNotes), ctx, offset, limit)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AllNotes", reflect.TypeOf((*MockRepository)(nil).AllNotes), ctx, pq)
 }
 
 // CreateNote mocks base method.
-func (m *MockRepository) CreateNote(ctx context.Context, note *models.Note) (*models.Note, error) {
+func (m *MockRepository) CreateNote(ctx context.Context, note *entities.Note) (*entities.Note, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateNote", ctx, note)
-	ret0, _ := ret[0].(*models.Note)
+	ret0, _ := ret[0].(*entities.Note)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -86,10 +87,10 @@ func (mr *MockRepositoryMockRecorder) DeleteNote(ctx, id any) *gomock.Call {
 }
 
 // GetNote mocks base method.
-func (m *MockRepository) GetNote(ctx context.Context, id uuid.UUID) (*models.Note, error) {
+func (m *MockRepository) GetNote(ctx context.Context, id uuid.UUID) (*entities.Note, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetNote", ctx, id)
-	ret0, _ := ret[0].(*models.Note)
+	ret0, _ := ret[0].(*entities.Note)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -101,10 +102,10 @@ func (mr *MockRepositoryMockRecorder) GetNote(ctx, id any) *gomock.Call {
 }
 
 // UpdateNote mocks base method.
-func (m *MockRepository) UpdateNote(ctx context.Context, note *models.Note) (*models.Note, error) {
+func (m *MockRepository) UpdateNote(ctx context.Context, note *entities.Note) (*entities.Note, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateNote", ctx, note)
-	ret0, _ := ret[0].(*models.Note)
+	ret0, _ := ret[0].(*entities.Note)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

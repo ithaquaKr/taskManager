@@ -6,7 +6,7 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/google/uuid"
-	"github.com/ithaquaKr/taskManager/internal/models"
+	"github.com/ithaquaKr/taskManager/internal/list/entities"
 	"github.com/jmoiron/sqlx"
 	"github.com/stretchr/testify/require"
 )
@@ -28,7 +28,7 @@ func TestListRepository_Create(t *testing.T) {
 
 		rows := sqlmock.NewRows([]string{"title", "type"}).AddRow(title_test, type_test)
 
-		lists := &models.List{
+		lists := &entities.List{
 			Title: title_test,
 			Type:  type_test,
 		}
@@ -58,7 +58,7 @@ func TestListRepository_Update(t *testing.T) {
 		test_type := "note"
 
 		rows := sqlmock.NewRows([]string{"id", "title", "type"}).AddRow(test_listID, test_title, test_type)
-		list := &models.List{
+		list := &entities.List{
 			ID:    test_listID,
 			Title: test_title,
 			Type:  test_type,

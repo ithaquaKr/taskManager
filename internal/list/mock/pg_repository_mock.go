@@ -14,7 +14,8 @@ import (
 	reflect "reflect"
 
 	uuid "github.com/google/uuid"
-	models "github.com/ithaquaKr/taskManager/internal/models"
+	entities "github.com/ithaquaKr/taskManager/internal/list/entities"
+	utils "github.com/ithaquaKr/taskManager/pkg/utils"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -42,25 +43,25 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // AllLists mocks base method.
-func (m *MockRepository) AllLists(ctx context.Context, offset, limit int) ([]*models.List, error) {
+func (m *MockRepository) AllLists(ctx context.Context, pq *utils.PaginationQuery) ([]*entities.List, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AllLists", ctx, offset, limit)
-	ret0, _ := ret[0].([]*models.List)
+	ret := m.ctrl.Call(m, "AllLists", ctx, pq)
+	ret0, _ := ret[0].([]*entities.List)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // AllLists indicates an expected call of AllLists.
-func (mr *MockRepositoryMockRecorder) AllLists(ctx, offset, limit any) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) AllLists(ctx, pq any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AllLists", reflect.TypeOf((*MockRepository)(nil).AllLists), ctx, offset, limit)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AllLists", reflect.TypeOf((*MockRepository)(nil).AllLists), ctx, pq)
 }
 
 // CreateList mocks base method.
-func (m *MockRepository) CreateList(ctx context.Context, list *models.List) (*models.List, error) {
+func (m *MockRepository) CreateList(ctx context.Context, list *entities.List) (*entities.List, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateList", ctx, list)
-	ret0, _ := ret[0].(*models.List)
+	ret0, _ := ret[0].(*entities.List)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -86,10 +87,10 @@ func (mr *MockRepositoryMockRecorder) DeleteList(ctx, id any) *gomock.Call {
 }
 
 // GetList mocks base method.
-func (m *MockRepository) GetList(ctx context.Context, id uuid.UUID) (*models.List, error) {
+func (m *MockRepository) GetList(ctx context.Context, id uuid.UUID) (*entities.List, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetList", ctx, id)
-	ret0, _ := ret[0].(*models.List)
+	ret0, _ := ret[0].(*entities.List)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -101,10 +102,10 @@ func (mr *MockRepositoryMockRecorder) GetList(ctx, id any) *gomock.Call {
 }
 
 // UpdateList mocks base method.
-func (m *MockRepository) UpdateList(ctx context.Context, list *models.List) (*models.List, error) {
+func (m *MockRepository) UpdateList(ctx context.Context, list *entities.List) (*entities.List, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateList", ctx, list)
-	ret0, _ := ret[0].(*models.List)
+	ret0, _ := ret[0].(*entities.List)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
