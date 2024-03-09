@@ -76,7 +76,52 @@ func (r *listRepo) DeleteList(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
 
-func (r *listRepo) AllLists(ctx context.Context, pq *utils.PaginationQuery) ([]*entities.List, error) {
-	// Implement this
-	return nil, nil
+func (r *listRepo) AllLists(ctx context.Context, pq *utils.PaginationQuery) (*entities.AllList, error) {
+	var totalCount int
+	if err := r.db.GetContext(ctx, &totalCount, getTotal); err != nil {
+		return nil, fmt.Errorf("listRepo.AllLists.GetContext, Error: %w", err)
+	}
+
+	if totalCount == 0 {
+		return &entities.AllList{
+			Paginate: utils.PaginationResponse{
+				TotalCount:   totalCount,
+				TotalPage:    utils.GetTotalPages(totalCount, pq.GetPageSize()),
+				HasMore:      utils.GetHasMore(pq.GetPageNumber(), totalCount, pq.GetPageSize()),
+				NextPage:     utils.GetNextPage(pq.GetPageNumber()),
+				PreviousPage: utils.GetPreviousPage(pq.GetPageNumber()),
+			},
+			Result: make([]*entities.List, 0),
+		}, nil
+	}
+
+	var lists = make([]*entities.List, 0, pq.GetPageSize())
+	rows, err := r.db.QueryxContext(ctx, allLists, pq.GetLimit(), pq.GetOffset())
+	if err != nil {
+		return nil, fmt.Errorf("listRepo.AllLists.QueryRowxContext, Error: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var list entities.List
+		if err := rows.StructScan(&list); err != nil {
+			return nil, fmt.Errorf("listRepo.AllLists.StructScan, Error: %w", err)
+		}
+		lists = append(lists, &list)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("listRepo.AllLists.Rows.Err, Error: %w", err)
+	}
+
+	return &entities.AllList{
+		Paginate: utils.PaginationResponse{
+			TotalCount:   totalCount,
+			TotalPage:    utils.GetTotalPages(totalCount, pq.GetPageSize()),
+			HasMore:      utils.GetHasMore(pq.GetPageNumber(), totalCount, pq.GetPageSize()),
+			NextPage:     utils.GetNextPage(pq.GetPageNumber()),
+			PreviousPage: utils.GetPreviousPage(pq.GetPageNumber()),
+		},
+		Result: lists,
+	}, nil
 }

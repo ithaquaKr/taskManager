@@ -16,6 +16,15 @@ type PaginationQuery struct {
 	PageSize int `json:"page_size,omitempty"`
 }
 
+// Paginate query response
+type PaginationResponse struct {
+	TotalCount   int  `json:"total_count"`
+	TotalPage    int  `json:"total_page"`
+	HasMore      bool `json:"has_more"`
+	NextPage     int  `json:"next_page"`
+	PreviousPage int  `json:"previous_page"`
+}
+
 // Set page size
 func (q *PaginationQuery) SetPageSize(sizeQuery string) error {
 	if sizeQuery == "" {
@@ -77,4 +86,22 @@ func GetTotalPages(totalItems, pageSize int) int {
 // Check if there is a next page
 func HasNextPage(currentPage, totalPages, pageSize int) bool {
 	return currentPage < totalPages/pageSize
+}
+
+// Get next page
+func GetNextPage(currentPage int) int {
+	return currentPage + 1
+}
+
+// Get previous page
+func GetPreviousPage(currentPage int) int {
+	if currentPage == 0 {
+		return 0
+	}
+	return currentPage - 1
+}
+
+// Get has more
+func GetHasMore(currentPage, totalCount, pageSize int) bool {
+	return currentPage < totalCount/pageSize
 }

@@ -20,5 +20,5 @@ type Repository interface {
 	// DeleteList deletes a list by id
 	DeleteList(ctx context.Context, id uuid.UUID) error
 	// GetLists retrieves a list of lists
-	AllLists(ctx context.Context, pq *utils.PaginationQuery) ([]*entities.List, error)
+	AllLists(ctx context.Context, pq *utils.PaginationQuery) (*entities.AllList, error)
 }
