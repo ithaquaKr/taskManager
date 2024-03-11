@@ -17,7 +17,7 @@ const (
 					RETURNING *`
 	getTask    = `SELECT * FROM tasks WHERE id=$1`
 	deleteTask = `DELETE FROM tasks where id=$1`
-	allTask    = `SELECT * FROM tasks
+	allTasks   = `SELECT * FROM tasks
 					ORDER BY created_at, updated_at
 					LIMIT $1
 					OFFSET $2`

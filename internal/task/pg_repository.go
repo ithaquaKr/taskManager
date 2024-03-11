@@ -10,7 +10,7 @@ import (
 )
 
 // Task Repository
-type Repository interface {
+type TaskRepository interface {
 	// CreateTask create a new task
 	CreateTask(ctx context.Context, task *entities.Task) (*entities.Task, error)
 	// GetTask retrieves a task by id
@@ -20,5 +20,5 @@ type Repository interface {
 	// DeleteTask deletes a task by id
 	DeleteTask(ctx context.Context, id uuid.UUID) error
 	// AllTasks retrieves a list of tasks
-	AllTasks(ctx context.Context, pq *utils.PaginationQuery) ([]*entities.Task, error)
+	AllTasks(ctx context.Context, pq *utils.PaginationQuery) (*entities.AllTask, error)
 }

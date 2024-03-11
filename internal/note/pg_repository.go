@@ -20,5 +20,5 @@ type Repository interface {
 	// DeleteNote deletes a note by id
 	DeleteNote(ctx context.Context, id uuid.UUID) error
 	// AllNotes retrieves a list of notes
-	AllNotes(ctx context.Context, pq *utils.PaginationQuery) ([]*entities.Note, error)
+	AllNotes(ctx context.Context, pq *utils.PaginationQuery) (*entities.AllNote, error)
 }

@@ -18,7 +18,7 @@ type taskRepo struct {
 }
 
 // Task repository constructor
-func NewTaskRepo(db *sqlx.DB) task.Repository {
+func NewTaskRepo(db *sqlx.DB) task.TaskRepository {
 	return &taskRepo{db: db}
 }
 
@@ -84,7 +84,51 @@ func (r *taskRepo) DeleteTask(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
 
-func (r *taskRepo) AllTasks(ctx context.Context, pq *utils.PaginationQuery) ([]*entities.Task, error) {
-	// Implement this function
-	return nil, nil
+func (r *taskRepo) AllTasks(ctx context.Context, pq *utils.PaginationQuery) (*entities.AllTask, error) {
+	var totalCount int
+	if err := r.db.GetContext(ctx, &totalCount, getTotal); err != nil {
+		return nil, fmt.Errorf("taskRepo.AllTasks.GetContext, Error: %w", err)
+	}
+	if totalCount == 0 {
+		return &entities.AllTask{
+			Paginate: utils.PaginationResponse{
+				TotalCount:   totalCount,
+				TotalPage:    utils.GetTotalPages(totalCount, pq.GetPageSize()),
+				HasMore:      utils.GetHasMore(pq.GetPageNumber(), totalCount, pq.GetPageSize()),
+				NextPage:     utils.GetNextPage(pq.GetPageNumber()),
+				PreviousPage: utils.GetPreviousPage(pq.GetPageNumber()),
+			},
+			Result: make([]*entities.Task, 0),
+		}, nil
+	}
+
+	var tasks []*entities.Task
+	rows, err := r.db.QueryxContext(ctx, allTasks, pq.GetLimit(), pq.GetOffset())
+	if err != nil {
+		return nil, fmt.Errorf("taskRepo.AllTasks.QueryxContext, Error: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var task entities.Task
+		if err := rows.StructScan(&task); err != nil {
+			return nil, fmt.Errorf("taskRepo.AllTasks.StructScan, Error: %w", err)
+		}
+		tasks = append(tasks, &task)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("taskRepo.AllTasks.Rows.Err, Error: %w", err)
+	}
+
+	return &entities.AllTask{
+		Paginate: utils.PaginationResponse{
+			TotalCount:   totalCount,
+			TotalPage:    utils.GetTotalPages(totalCount, pq.GetPageSize()),
+			HasMore:      utils.GetHasMore(pq.GetPageNumber(), totalCount, pq.GetPageSize()),
+			NextPage:     utils.GetNextPage(pq.GetPageNumber()),
+			PreviousPage: utils.GetPreviousPage(pq.GetPageNumber()),
+		},
+		Result: tasks,
+	}, nil
 }

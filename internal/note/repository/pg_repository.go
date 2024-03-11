@@ -77,7 +77,51 @@ func (r *noteRepo) DeleteNote(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
 
-func (r *noteRepo) AllNotes(ctx context.Context, pq *utils.PaginationQuery) ([]*entities.Note, error) {
-	// Implement this
-	return nil, nil
+func (r *noteRepo) AllNotes(ctx context.Context, pq *utils.PaginationQuery) (*entities.AllNote, error) {
+	var totalCount int
+	if err := r.db.GetContext(ctx, &totalCount, getTotal); err != nil {
+		return nil, fmt.Errorf("noteRepo.AllNotes.QueryContext, Error: %w", err)
+	}
+	if totalCount == 0 {
+		return &entities.AllNote{
+			Paginate: utils.PaginationResponse{
+				TotalCount:   totalCount,
+				TotalPage:    utils.GetTotalPages(totalCount, pq.GetPageSize()),
+				HasMore:      utils.GetHasMore(pq.GetPageNumber(), totalCount, pq.GetPageSize()),
+				NextPage:     utils.GetNextPage(pq.GetPageNumber()),
+				PreviousPage: utils.GetPreviousPage(pq.GetPageNumber()),
+			},
+			Result: make([]*entities.Note, 0),
+		}, nil
+	}
+
+	var notes []*entities.Note
+	rows, err := r.db.QueryxContext(ctx, allNotes, pq.GetLimit(), pq.GetOffset())
+	if err != nil {
+		return nil, fmt.Errorf("noteRepo.AllNotes.QueryxContext, Error: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var note entities.Note
+		if err := rows.StructScan(&note); err != nil {
+			return nil, fmt.Errorf("noteRepo.AllNotes.StructScan, Error: %w", err)
+		}
+		notes = append(notes, &note)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("noteRepo.AllNotes.Rows.Err, Error: %w", err)
+	}
+
+	return &entities.AllNote{
+		Paginate: utils.PaginationResponse{
+			TotalCount:   totalCount,
+			TotalPage:    utils.GetTotalPages(totalCount, pq.GetPageSize()),
+			HasMore:      utils.GetHasMore(pq.GetPageNumber(), totalCount, pq.GetPageSize()),
+			NextPage:     utils.GetNextPage(pq.GetPageNumber()),
+			PreviousPage: utils.GetPreviousPage(pq.GetPageNumber()),
+		},
+		Result: notes,
+	}, nil
 }
