@@ -32,7 +32,7 @@ type apiLogger struct {
 }
 
 // App Logger constructor
-func NewApiLogger(cfg *config.Config) *apiLogger {
+func NewAPILogger(cfg *config.Config) *apiLogger {
 	return &apiLogger{cfg: cfg}
 }
 
@@ -47,6 +47,7 @@ var loggerLevelMap = map[string]zapcore.Level{
 	"fatal":  zapcore.FatalLevel,
 }
 
+// Get logger level from config
 func (l *apiLogger) getLoggerLevel(cfg *config.Config) zapcore.Level {
 	level, exist := loggerLevelMap[cfg.Logger.Level]
 	if !exist {

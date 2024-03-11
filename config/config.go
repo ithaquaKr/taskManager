@@ -7,12 +7,14 @@ import (
 	"github.com/spf13/viper"
 )
 
+// All config struct
 type Config struct {
 	App      AppConfig
 	Postgres PostgresConfig
 	Logger   LoggerConfig
 }
 
+// App config struct
 type AppConfig struct {
 	AppVersion string `mapstructure:"VERSION"`
 	Host       string `mapstructure:"HOST"`
@@ -21,6 +23,7 @@ type AppConfig struct {
 	Mode       string `mapstructure:"MODE"`
 }
 
+// Postgres config struct
 type PostgresConfig struct {
 	PostgresURL      string `mapstructure:"URL"`
 	PostgresHost     string `mapstructure:"HOST"`
@@ -31,6 +34,7 @@ type PostgresConfig struct {
 	PostgresPgDriver string `mapstructure:"PG_DRIVER"`
 }
 
+// Logger config struct
 type LoggerConfig struct {
 	Development       bool   `mapstructure:"DEVELOPMENT"`
 	DisableCaller     bool   `mapstructure:"DISABLE_CALLER"`
@@ -39,6 +43,7 @@ type LoggerConfig struct {
 	Level             string `mapstructure:"LEVEL"`
 }
 
+// LoadConfig loads configuration from given path
 func LoadConfig(path string) (*viper.Viper, error) {
 	v := viper.New()
 
@@ -56,6 +61,7 @@ func LoadConfig(path string) (*viper.Viper, error) {
 	return v, nil
 }
 
+// ParseConfig parses config from viper instance
 func ParseConfig(v *viper.Viper) (*Config, error) {
 	var c Config
 	err := v.Unmarshal(&c)
