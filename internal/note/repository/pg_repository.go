@@ -100,7 +100,6 @@ func (r *noteRepo) AllNotes(ctx context.Context, pq *utils.PaginationQuery) (*en
 	if err != nil {
 		return nil, fmt.Errorf("noteRepo.AllNotes.QueryxContext, Error: %w", err)
 	}
-	defer rows.Close()
 
 	for rows.Next() {
 		var note entities.Note

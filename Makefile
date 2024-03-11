@@ -1,12 +1,12 @@
 # Makefile
-.PHONY: postgresql createdb dropdb force version migrateup migratedown runserver
+.PHONY: postgresql createdb dropdb force version migrateup migratedown run-linter tests runserver
 
 # Environment variables for project
-ENV := $(PWD)/.env
-include $(ENV)
+# ENV := $(PWD)/.env
+# include $(ENV)
 
 # Export all variable to sub-make
-export 
+# export
 
 # Internal variables
 DB_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable
@@ -40,6 +40,18 @@ createdb:
 dropdb:
 	@echo "Droping database..."
 	docker exec -it taskmanager_db dropdb ${POSTGRES_DB}
+
+
+# ==============================================================================
+# Tools commands
+
+run-linter:
+	@echo "Applying linter"
+	golangci-lint version
+	golangci-lint run -c .golangci.yaml ./...
+
+tests:
+	go test -v -parallel 2 -cover ./...
 
 #------------------------
 # Run server
