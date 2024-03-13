@@ -27,10 +27,11 @@ func TestListRepositoryCreate(t *testing.T) {
 
 	// Test create list repository success
 	t.Run("repository_list_create_success", func(t *testing.T) {
+		id_test := uuid.New()
 		title_test := "test title"
 		type_test := "task"
 
-		rows := sqlmock.NewRows([]string{"title", "type"}).AddRow(title_test, type_test)
+		rows := sqlmock.NewRows([]string{"id", "title", "type"}).AddRow(id_test, title_test, type_test)
 
 		lists := &entities.List{
 			Title: title_test,
@@ -40,6 +41,7 @@ func TestListRepositoryCreate(t *testing.T) {
 		createList, err := listRepo.CreateList(context.Background(), lists)
 		require.NoError(t, err)
 		require.NotNil(t, createList)
+		require.Equal(t, id_test, createList.ID)
 		require.Equal(t, title_test, createList.Title)
 		require.Equal(t, type_test, createList.Type)
 	})

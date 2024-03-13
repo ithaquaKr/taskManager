@@ -27,6 +27,7 @@ func TestTaskRepositoryCreate(t *testing.T) {
 	taskRepo := NewTaskRepo(sqlxDB)
 
 	t.Run("repository_task_create_success", func(t *testing.T) {
+		id_test := uuid.New()
 		listID_test := uuid.New()
 		name_test := "test name"
 		description_test := "test description"
@@ -35,8 +36,8 @@ func TestTaskRepositoryCreate(t *testing.T) {
 		priority_test := "no_priority"
 		dueDate_test := time.Now()
 		rows := sqlmock.NewRows([]string{
-			"list_id", "name", "description", "status", "tag", "priority", "due_date",
-		}).AddRow(listID_test, name_test, description_test, status_test, tag_test, priority_test, dueDate_test)
+			"id", "list_id", "name", "description", "status", "tag", "priority", "due_date",
+		}).AddRow(id_test, listID_test, name_test, description_test, status_test, tag_test, priority_test, dueDate_test)
 
 		tasks := &entities.Task{
 			ListID:      listID_test,
@@ -53,6 +54,7 @@ func TestTaskRepositoryCreate(t *testing.T) {
 		createTask, err := taskRepo.CreateTask(context.Background(), tasks)
 		require.NoError(t, err)
 		require.NotNil(t, createTask)
+		require.Equal(t, id_test, createTask.ID)
 		require.Equal(t, listID_test, createTask.ListID)
 		require.Equal(t, name_test, createTask.Name)
 		require.Equal(t, &description_test, createTask.Description)
