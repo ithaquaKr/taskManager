@@ -26,10 +26,11 @@ func TestNoteRepositoryCreate(t *testing.T) {
 	noteRepo := NewNoteRepo(sqlxDB)
 
 	t.Run("repository_note_create_success", func(t *testing.T) {
+		test_id := uuid.New()
 		test_listID := uuid.New()
 		test_name := "test name"
 		test_content := "test content"
-		rows := sqlmock.NewRows([]string{"list_id", "name", "content"}).AddRow(test_listID, test_name, test_content)
+		rows := sqlmock.NewRows([]string{"id", "list_id", "name", "content"}).AddRow(test_id, test_listID, test_name, test_content)
 
 		notes := &entities.Note{
 			ListID:  test_listID,
@@ -40,6 +41,7 @@ func TestNoteRepositoryCreate(t *testing.T) {
 		createNote, err := noteRepo.CreateNote(context.Background(), notes)
 		require.NoError(t, err)
 		require.NotNil(t, createNote)
+		require.Equal(t, test_id, createNote.ID)
 		require.Equal(t, test_listID, createNote.ListID)
 		require.Equal(t, test_name, createNote.Name)
 		require.Equal(t, test_content, createNote.Content)
